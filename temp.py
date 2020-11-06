@@ -42,7 +42,7 @@ time deltatime ()"""
 
 
 
-#calcul indice humidex
+#calcul indice humidex. il manque l'utilisation de nos données, je m'en occupe ce weekend.
 
 # t is temperature in °C
 # d is dew Point Temperature in °C
