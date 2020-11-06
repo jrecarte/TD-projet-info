@@ -39,3 +39,28 @@ def convtime(strtime):
     return time
 
 time deltatime ()"""
+
+
+
+#calcul indice humidex
+
+# t is temperature in °C
+# d is dew Point Temperature in °C
+import math
+
+
+def get_humidex(t, d):
+
+    kelvin = 273.15
+    temperature = t + kelvin
+    dewpoint = d + kelvin
+
+    # Calculate vapor pressure in mbar.
+    e = 6.11 * math.exp(5417.7530 * ((1 / kelvin) - (1 / dewpoint)))
+
+    # Calculate saturation vapor pressure
+    h = 0.5555 * (e - 10.0)
+
+    humidex = temperature + h - kelvin
+
+    return humidex
