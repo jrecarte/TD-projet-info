@@ -24,7 +24,7 @@ for elt in date:                                                        #on pren
 x = date                                                                #on affiche la courbe
 y = df['noise']
 plt.plot(x,y)
-plt.show ()
+plt.show()
 
 
 """
@@ -64,3 +64,6 @@ def get_humidex(t, d):
     humidex = temperature + h - kelvin
 
     return humidex
+humidex=[]
+for i in range(len(df['temp'])):
+    humidex.append(get_humidex(df['temp'], df['humidity']))
