@@ -5,15 +5,21 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-df = pd.read_csv("C:\\Users\Paul\Documents\EIVP\Projet Python/EIVP_KM.csv",sep=';')
+df = pd.read_csv("C:\\Users\Paul\Documents\EIVP\TD-projet-info/EIVP_KM.csv",sep=';')
 datedépart= datetime.strptime(input("date de départ:"), "%Y-%m-%d")     #date de départ demandée
 datearrivée= datetime.strptime(input("date d'arrivée:"), "%Y-%m-%d")    #date de fin demandée
 NomDeLaDonnée = input("Nom de la donnée:")
+NumCapteur = float(input("Quel capteur prendre:"))
+capteur=df['id']
 date = []
 DonnéeEtudiée=df[NomDeLaDonnée]
 
 for elt in df['sent_at']:                                               #on crée une liste des différentes dates sous le bon type : datetime
     date.append(datetime.strptime(elt[0:-6],"%Y-%m-%d %H:%M:%S"))
+
+
+
+
 for elt in date:                                                        #on prend les dates pour quelles soient comprises entre la date de départ et celle de fin ET c'est là qu'est le
     if elt<datedépart:                                                  #problème
         DonnéeEtudiée.pop(date.index(elt))
@@ -21,8 +27,13 @@ for elt in date:                                                        #on pren
     elif elt>datearrivée:
         DonnéeEtudiée.pop(date.index(elt))
         date.remove(elt)
+for i in range(len(capteur)):
+    if capteur[i]!= NumCapteur:
+        del DonnéeEtudiée[i]
+        del date[i]
+
 x = date                                                                #on affiche la courbe
-y = df['noise']
+y = DonnéeEtudiée
 plt.plot(x,y)
 plt.show()
 
@@ -48,7 +59,7 @@ time deltatime ()"""
 # d is dew Point Temperature in °C
 import math
 
-
+"""
 def get_humidex(t, d):
 
     kelvin = 273.15
@@ -66,4 +77,4 @@ def get_humidex(t, d):
     return humidex
 humidex=[]
 for i in range(len(df['temp'])):
-    humidex.append(get_humidex(df['temp'], df['humidity']))
+    humidex.append(get_humidex(df['temp'], df['humidity']))"""
