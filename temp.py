@@ -21,6 +21,7 @@ for elt in date:                                                        #on pren
     elif elt>datearrivée:
         DonnéeEtudiée.pop(date.index(elt))
         date.remove(elt)
+
 x = date                                                                #on affiche la courbe
 y = df['noise']
 plt.plot(x,y)
@@ -41,29 +42,16 @@ def convtime(strtime):
 time deltatime ()"""
 
 
+#calcul indice humidex
 
-#calcul indice humidex. il manque l'utilisation de nos données, je m'en occupe ce weekend.
-
-# t is temperature in °C
-# d is dew Point Temperature in °C
 import math
-
-
-def get_humidex(t, d):
-
-    kelvin = 273.15
-    temperature = t + kelvin
-    dewpoint = d + kelvin
-
-    # Calculate vapor pressure in mbar.
-    e = 6.11 * math.exp(5417.7530 * ((1 / kelvin) - (1 / dewpoint)))
-
-    # Calculate saturation vapor pressure
-    h = 0.5555 * (e - 10.0)
-
-    humidex = temperature + h - kelvin
-
+def humidex (T):
+    H= humidex ('temp') 
+               for i in range(df['temp'])) 
+               H='temp'+ 5/9*(6,112*10exp(7,5*(('temp')/(237,7+'temp')))*('temp'/100)-10
     return humidex
+
 humidex=[]
+
 for i in range(len(df['temp'])):
     humidex.append(get_humidex(df['temp'], df['humidity']))
