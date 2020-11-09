@@ -27,10 +27,13 @@ for elt in date:                                                        #on pren
     elif elt>datearrivée:
         DonnéeEtudiée.pop(date.index(elt))
         date.remove(elt)
+<<<<<<< HEAD
 for i in range(len(capteur)):
     if capteur[i]!= NumCapteur:
         del DonnéeEtudiée[i]
         del date[i]
+=======
+>>>>>>> b2cef6a6b9d250bbc41719df3bf71a64a58f7f58
 
 x = date                                                                #on affiche la courbe
 y = DonnéeEtudiée
@@ -52,12 +55,10 @@ def convtime(strtime):
 time deltatime ()"""
 
 
+#calcul indice humidex
 
-#calcul indice humidex. il manque l'utilisation de nos données, je m'en occupe ce weekend.
-
-# t is temperature in °C
-# d is dew Point Temperature in °C
 import math
+<<<<<<< HEAD
 
 """
 def get_humidex(t, d):
@@ -74,7 +75,15 @@ def get_humidex(t, d):
 
     humidex = temperature + h - kelvin
 
+=======
+def humidex (T):
+    H= humidex ('temp') 
+               for i in range(df['temp'])) 
+               H='temp'+ 5/9*(6,112*10exp(7,5*(('temp')/(237,7+'temp')))*('temp'/100)-10
+>>>>>>> b2cef6a6b9d250bbc41719df3bf71a64a58f7f58
     return humidex
+
 humidex=[]
+
 for i in range(len(df['temp'])):
     humidex.append(get_humidex(df['temp'], df['humidity']))"""
