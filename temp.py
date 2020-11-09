@@ -44,14 +44,21 @@ time deltatime ()"""
 
 #calcul indice humidex
 
-import math
-def humidex (T):
-    H= humidex ('temp') 
-               for i in range(df['temp'])) 
-               H='temp'+ 5/9*(6,112*10exp(7,5*(('temp')/(237,7+'temp')))*('temp'/100)-10
-    return humidex
+import math                                            
+def humidex (T):                                              #je définis ma fonction "humidex" à créer, elle dépend du paramètre T ou température (à voir si c'est nécessaire de l'appeler T plutot que température )
+    H= humidex ('temp')                                       #je la nomme "H" pour la suite
+               for T in range(df['temp']))                    #j'utilise les donnés de la température dans le CSV et je nomme la variable "T"
+               H= T + 5/9*(6,112*10exp(7,5*((T)/(237,7+T)))*('T/100)-10      #formule humidex avec une seule variable T
+    return humidex              #return pour terminer les détails de la fonction
 
-humidex=[]
+print humidex              #j'affiche les résultats, comment on fait pour ajouter une nouvelle colonne avec ces résultats ?
 
-for i in range(len(df['temp'])):
-    humidex.append(get_humidex(df['temp'], df['humidity']))
+x = df['humidex']                                                        #on affiche la courbe
+y = df['date']         #avec ce que tu as modifié, comment on fait pour récupérer le temps (différence avec les dates)
+plt.plot(x,y)
+plt.show()
+
+
+#humidex=[]                #c'était ce que tu avais ajouté toi il me semble de ton côté, quand on avait discuté ensemble l'autre jour
+#for i in range(len(df['temp'])):
+    #humidex.append(get_humidex(df['temp'], df['humidity']))
