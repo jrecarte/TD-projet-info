@@ -73,7 +73,7 @@ for i in range(len(DonnéeEtudiéef)):
 
 
 ###Moyenne
-if NomDeLaDonnée=="humidex":
+if NomDeLaDonnée=="humidity":
     mult=1
     for elt in DonnéeEtudiéef:
         mult*=elt/100
@@ -88,7 +88,7 @@ else:                #Pour l'humidité relative utilisé la moyenne géométriqu
 ###Variance
 somme=0
 for elt in DonnéeEtudiéef:
-    somme+=(elt-moy)**2                      #on ne peut que si la donnée n'est pas l'humidex n'est ce pas ?
+    somme+=(elt-moy)**2                      #on ne peut que si la donnée n'est pas l'humidity n'est ce pas ?
 variance=somme/len(DonnéeEtudiéef)
 ecarttype=variance**0.5
 
