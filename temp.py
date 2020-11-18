@@ -3,9 +3,21 @@ import math
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import sys
 from datetime import datetime
 
 df = pd.read_csv("C:\\Users\Paul\Documents\EIVP\TD-projet-info/EIVP_KM.csv",sep=';')
+
+action=sys.argv[0]
+if action=="display" or action=="displayStat":
+    variable=sys.argv[1]
+    start_date=datetime.strptime(sys.argv[2], "%Y-%m-%d")
+    end_date=datetime.strptime(sys.argv[3], "%Y-%m-%d")
+elif action=="corrélation":
+    variable1=sys.argv[1]
+    variable2=sys.argv[2]
+    start_date=datetime.strptime(sys.argv[3], "%Y-%m-%d")
+    end_date=datetime.strptime(sys.argv[4], "%Y-%m-%d")
 
 
 
