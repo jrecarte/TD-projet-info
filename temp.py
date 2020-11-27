@@ -8,11 +8,23 @@ from datetime import datetime
 
 df = pd.read_csv("C:\\Users\Paul\Documents\EIVP\TD-projet-info/EIVP_KM.csv",sep=';')
 
+
+
+###Indice humidex
+
+def humidex(T,H):
+    return(T + 5/9*(6.112*10**(7.5*((T)/(237.7+T)))*(H/100)-10))
+
 action=sys.argv[0]
+#####Affichage des courbes (display)
 if action=="display" or action=="displayStat":
     variable=sys.argv[1]
     start_date=datetime.strptime(sys.argv[2], "%Y-%m-%d")
     end_date=datetime.strptime(sys.argv[3], "%Y-%m-%d")
+    if variable=="humidex":
+        Humidex=[]
+        for i in range(len(df['temp'])):
+            Humidex.append(humidex(df['temp'][i],df['humidity'][i]))
 elif action=="corrélation":
     variable1=sys.argv[1]
     variable2=sys.argv[2]
@@ -21,10 +33,7 @@ elif action=="corrélation":
 
 
 
-###Indice humidex
 
-def humidex(T,H):
-    return(T + 5/9*(6.112*10**(7.5*((T)/(237.7+T)))*(H/100)-10))
 Humidex=[]
 for i in range(len(df['temp'])):
     Humidex.append(humidex(df['temp'][i],df['humidity'][i]))
@@ -91,10 +100,10 @@ if NomDeLaDonnée=="humidity":
         mult*=elt/100
     moy=mult**(1/len(DonnéeEtudiéef))*100
 else:                #Pour l'humidité relative utilisé la moyenne géométrique, pour le reste, moyenne arithmétique
-    sum=0
+    somme=0
     for elt in DonnéeEtudiéef:
-        sum+=elt
-    moy=sum/len(DonnéeEtudiéef)
+        somme+=elt
+    moy=somme/len(DonnéeEtudiéef)
 
 
 ###Variance
@@ -112,6 +121,12 @@ if len(DonnéeTriée)%2==1:
 else:
     médiane=(DonnéeTriée[index]+DonnéeTriée[index+1])/2
 
+###Indice de corrélation
+"""for i in range(len(variable1)):
+    somme+=(variable1[i]-moyenne(variable1))*(variable2[i]-moyenne(variable2))
+covariance=somme*(1/len(variable1))
+indicecorr=covariance/(ecarttype(variable1)*ecarttype(variable2))
+"""
 ###Nom pour graphique
 if NomDeLaDonnée=="temp":
     NomDeLaDonnée="Température"
