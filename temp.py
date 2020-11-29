@@ -1,8 +1,7 @@
-import csv
-import math
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib
 import sys
 from datetime import datetime
 
@@ -18,13 +17,34 @@ Humidex=[]
 for i in range(len(df['temp'])):
     Humidex.append(humidex(df['temp'][i],df['humidity'][i]))
 
+def moyenne(variable,donnéeEtudiée):
+    if variable=="humidity":
+        mult=1
+        for elt in donnéeEtudiée:
+            mult*=elt/100
+        return(mult**(1/len(donnéeEtudiée))*100)
+    else:
+        somme=0
+        for elt in donnéeEtudiée:
+            somme+=elt
+        return(somme/len(donnéeEtudiée))
+def ecarttype(variable,DonnéeEtudiée):
+    somme=0
+    for elt in DonnéeEtudiée:
+        somme+=(elt-moyenne(variable,DonnéeEtudiée))**2
+    variance=somme/len(DonnéeEtudiée)
+    return(variance**0.5)
 
-action=sys.argv[0]
-#####Affichage des courbes (display)
+
+
+
+
+action=sys.argv[1]
 if action=="display" or action=="displayStat":
-    variable=sys.argv[1]
-    start_date=datetime.strptime(sys.argv[2], "%Y-%m-%d")
-    end_date=datetime.strptime(sys.argv[3], "%Y-%m-%d")
+    variable=sys.argv[2]
+    start_date=datetime.strptime(sys.argv[3], "%Y-%m-%d")
+    end_date=datetime.strptime(sys.argv[4], "%Y-%m-%d")
+    ###DISPLAY (AFFICHAGE DE COURBES)
     if action=="display":
         capteur=df['id']
         date = []
@@ -59,7 +79,6 @@ if action=="display" or action=="displayStat":
 
             plt.figure(titre)
             plt.plot(datef,DonnéeEtudiéef,"b-",label=variable)
-            plt.plot(datef,Moy,"c-.",label="Moyenne")
             plt.title(titre)
             plt.xlabel("Temps")
             plt.ylabel(variable)
@@ -157,16 +176,77 @@ if action=="display" or action=="displayStat":
 
 ###Corrélation
 elif action=="corrélation":
-    variable1=sys.argv[1]
-    variable2=sys.argv[2]
-    start_date=datetime.strptime(sys.argv[3], "%Y-%m-%d")
-    end_date=datetime.strptime(sys.argv[4], "%Y-%m-%d")
+    variable1=sys.argv[2]
+    variable2=sys.argv[3]
+    start_date=datetime.strptime(sys.argv[4], "%Y-%m-%d")
+    end_date=datetime.strptime(sys.argv[5], "%Y-%m-%d")
+    capteur=df['id']
+    date = []
+
+    for elt in df['sent_at']:
+        date.append(datetime.strptime(elt[0:-6],"%Y-%m-%d %H:%M:%S"))
+
+    if variable1=='humidex':
+        DonnéeEtudiée1=Humidex
+    else:
+        DonnéeEtudiée1=df[variable1]
+    if variable2=='humidex':
+        DonnéeEtudiée2=Humidex
+    else:
+        DonnéeEtudiée2=df[variable2]
 
 
-    ###Indice de corrélation
-    """for i in range(len(variable1)):
-        somme+=(variable1[i]-moyenne(variable1))*(variable2[i]-moyenne(variable2))
-    covariance=somme*(1/len(variable1))
-    indicecorr=covariance/(ecarttype(variable1)*ecarttype(variable2))
-    """
+    for numcapteur in range(6):
+        datef=[]
+        DonnéeEtudiée1f=[]
+        DonnéeEtudiée2f=[]
+        for i in range(len(date)):
+            if date[i]>=start_date and date[i]<=end_date and capteur[i]==numcapteur+1:
+                datef.append(date[i])
+                DonnéeEtudiée1f.append(DonnéeEtudiée1[i])
+                DonnéeEtudiée2f.append(DonnéeEtudiée2[i])
 
+
+        somme=0
+        for i in range(len(DonnéeEtudiée1f)):
+            somme+=(DonnéeEtudiée1f[i]-moyenne(variable1,DonnéeEtudiée1f))*(DonnéeEtudiée2f[i]-moyenne(variable2,DonnéeEtudiée2f))
+        covariance=somme*(1/len(DonnéeEtudiée1f))
+        indicecorr=covariance/(ecarttype(variable1,DonnéeEtudiée1f)*ecarttype(variable2,DonnéeEtudiée2f))
+        indicecorrstr=str(indicecorr)
+
+        if variable1=="temp":
+            variable1="Température"
+        elif variable1=="noise":
+            variable1="bruit"
+        elif variable1=="humidity":
+            variable1="Humidité"
+        elif variable1=="lum":
+            variable1="Luminosité"
+        if variable2=="temp":
+            variable2="Température"
+        elif variable2=="noise":
+            variable2="bruit"
+        elif variable2=="humidity":
+            variable2="Humidité"
+        elif variable2=="lum":
+            variable2="Luminosité"
+
+
+        titre="Tracé de "+ variable1 + " et de " + variable2 + " en fonction du temps " + "du capteur n°" + str(numcapteur+1) + ". Les variables ont alors un indice de corrélation de " + str(indicecorr)[0:4]
+        fig, ax1 = plt.subplots()
+
+        color = 'tab:red'
+        ax1.set_xlabel('Temps')
+        ax1.set_ylabel(variable1, color=color)
+        ax1.plot(datef, DonnéeEtudiée1f, color=color)
+        ax1.tick_params(axis='y', labelcolor=color)
+
+        ax2 = ax1.twinx()
+        color = 'tab:blue'
+        ax2.set_ylabel(variable2, color=color)
+        ax2.plot(datef, DonnéeEtudiée2f, color=color)
+        ax2.tick_params(axis='y', labelcolor=color)
+
+        fig.tight_layout()
+        plt.title(titre)
+    plt.show()
