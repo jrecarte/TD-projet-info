@@ -132,7 +132,7 @@ if action=="display" or action=="displayStat":
                 somme+=(elt-moy)**2                      #on ne peut que si la donnée n'est pas l'humidity n'est ce pas ?
             variance=somme/len(DonnéeEtudiéef)
             ecarttype=variance**0.5
-
+            print("L'écart type du capteur n°" + str(numcapteur) +" est de " + str(ecarttype))
             ###Médiane
             DonnéeTriée=sorted(DonnéeEtudiéef)
             index=(len(DonnéeTriée)-1)//2
