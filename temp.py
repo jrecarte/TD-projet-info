@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
 import sys
-from datetime import datetime
+from datetime import datetime , timedelta
 
 df = pd.read_csv("C:\\Users\Paul\Documents\EIVP\TD-projet-info/EIVP_KM.csv",sep=';')
 
@@ -249,4 +249,88 @@ elif action=="corrélation":
 
         fig.tight_layout()
         plt.title(titre)
+    plt.show()
+
+elif action=="similarites":
+    numcapteur1=sys.argv[2]
+    numcapteur2=sys.argv[3]
+    liste=['noise','temp','humidity','lum','co2']
+
+    for elt in liste:
+        date=[]
+        for strdate in df['sent_at']:
+            date.append(datetime.strptime(strdate[0:-6],"%Y-%m-%d %H:%M:%S"))
+        variable=df[elt]
+        capteur=df['id']
+
+
+        date1 , date2 = [],[]
+        variable1 , variable2 = [], []
+        for i in range(len(df['id'])):
+            if str(capteur[i])==numcapteur1:
+                variable1.append(variable[i])
+                date1.append(date[i])
+            elif str(capteur[i])==numcapteur2:
+                variable2.append(variable[i])
+                date2.append(date[i])
+
+        delta=timedelta(minutes=8)
+
+        while date1[0]+delta<=date2[0]:
+            date1.pop(0)
+            variable1.pop(0)
+        while date2[0]+delta<=date1[0]:
+            date2.pop(0)
+            variable2.pop(0)
+        while date1[-1]-delta>=date2[-1]:
+            date1.pop(-1)
+            variable1.pop(-1)
+        while date2[-1]-delta>=date1[-1]:
+            date2.pop(-1)
+            variable2.pop(-1)
+
+
+        date1f,date2f=[],[]
+        variable1f,variable2f=[],[]
+        for i in range(len(date1)):
+            for j in range(len(date2)):
+                if date2[j]-delta<=date1[i] and date1[i]<=date2[j]+delta:
+                    date1f.append(date1[i])
+                    variable1f.append(variable1[i])
+        for i in range(len(date2)):
+            for j in range(len(date1)):
+                if date1[j]-delta<=date2[i] and date2[i]<=date1[j]+delta:
+                    date2f.append(date2[i])
+                    variable2f.append(variable2[i])
+
+        moy1=moyenne(elt,variable1f)
+        moy2=moyenne(elt,variable2f)
+        ecart=0.05*((moy1+moy2)/2)
+        datessimilarites=[]
+        similarites=[]
+        for i in range(len(variable1f)):
+            d=abs(variable1f[i]-variable2f[i])
+            if d<=ecart:
+                similarites.append((variable1f[i]+variable2f[i])/2)
+                datessimilarites.append(date1f[i])
+
+        if elt=="temp":
+            elt="Température"
+        elif elt=="noise":
+            elt="bruit"
+        elif elt=="humidity":
+            elt="Humidité"
+        elif elt=="lum":
+            elt="Luminosité"
+
+        titre="Tracé de "+ elt +" en fonction du temps " + "du capteur n°" + numcapteur1 + " et du capteur n°"+ numcapteur2 + " ainsi que leurs similarités"
+
+        plt.figure(titre)
+        plt.plot(date1f,variable1f,"b--",label=elt+" du capteur n°" + numcapteur1)
+        plt.plot(date2f,variable2f,"r--",label=elt+" du capteur n°" + numcapteur2)
+        plt.plot_date(datessimilarites,similarites,"m:",label="similarites entre le capteur n°"+numcapteur1+" et du capteur n°"+numcapteur2)
+        plt.title(titre)
+        plt.xlabel("Temps")
+        plt.ylabel(elt)
+        plt.legend()
     plt.show()
