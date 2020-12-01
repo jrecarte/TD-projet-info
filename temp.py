@@ -328,7 +328,7 @@ elif action=="similarites":
         plt.figure(titre)
         plt.plot(date1f,variable1f,"b--",label=elt+" du capteur n°" + numcapteur1)
         plt.plot(date2f,variable2f,"r--",label=elt+" du capteur n°" + numcapteur2)
-        plt.plot_date(datessimilarites,similarites,"m:",label="similarites entre le capteur n°"+numcapteur1+" et du capteur n°"+numcapteur2)
+        plt.plot(datessimilarites,similarites,"om",label="similarites entre le capteur n°"+numcapteur1+" et du capteur n°"+numcapteur2)
         plt.title(titre)
         plt.xlabel("Temps")
         plt.ylabel(elt)
